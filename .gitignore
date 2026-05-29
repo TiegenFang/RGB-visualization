@@ -1,0 +1,12 @@
+*
+!.gitignore
+!README.md
+!main.m
+!temp.m
+!mask.m
+!rgb.m
+!video.m
+!natsort.m
+!natsortfiles.m
+!G_B.txt
+!G_B_exp.txt
