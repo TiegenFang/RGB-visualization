@@ -1,4 +1,8 @@
-function [processed_image,T_ig] = temp(input_image, r_b,r_g,g_b,k,Tpre,output_folder,T_ig)
+function [processed_image,T_ig] = temp(input_image, r_b,r_g,g_b,k,Tpre,output_folder,T_ig,frame_order)
+
+if nargin < 9
+    frame_order = k;
+end
 
 % 调用函数提取图像的矩形区域
 cropped_img = imcrop(input_image,[674.5 180.5 341 67]);
@@ -165,10 +169,10 @@ cb.Label.String = 'Temperature (K)';
 xlabel('X (mm)');
 ylabel('Y (mm)');
 % 设置图片标题为 'i s'
-if k <= 25
-    frame_time = (k - 1) / 5;
+if frame_order <= 25
+    frame_time = (frame_order - 1) / 5;
 else
-    frame_time = 5 + (k - 26);
+    frame_time = 5 + (frame_order - 26);
 end
 title(sprintf('%.1f s', frame_time), 'FontSize', 12, 'FontWeight', 'normal');
 set(gca, 'FontSize', 11, 'LineWidth', 0.8, 'TickDir', 'out', 'Box', 'on');
