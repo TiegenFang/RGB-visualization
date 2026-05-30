@@ -119,22 +119,17 @@ save(output_path1, 'G_B');  % 保存矩阵 T_new 到 .mat 文件
 % colorbar;%添加颜色条
 % axis equal;% 保持横纵坐标比例一致
 
-% 设置缩小比例
-scale_factor = 4/812;  % 缩小比例，单位是像素/mm
-
 % 获取图像尺寸（像素）
 num_rows = size(T_new, 1);  % 图像的行数 (900)
 num_cols = size(T_new, 2);  % 图像的列数 (5120)
 
-% 计算每个像素代表的实际物理长度
-x_pixel_size = scale_factor;  % 横坐标方向每个像素的实际物理大小，单位 mm
-y_pixel_size = scale_factor;  % 纵坐标方向每个像素的实际物理大小，单位 mm
-
 % 创建热图。直接用毫米坐标绘图，避免再手动把毫米刻度换算成像素刻度。
 temperature_min = 273+Tpre;
 temperature_max = max(T);
-x_mm = (0:num_cols-1) * x_pixel_size;
-y_mm = (0:num_rows-1) * y_pixel_size;
+x_range_mm = 20;
+y_range_mm = 4.5;
+x_mm = linspace(0, x_range_mm, num_cols);
+y_mm = linspace(0, y_range_mm, num_rows);
 
 % 只平滑和插值绘图用矩阵，不改变前面保存的原始 T_new 数据。
 T_plot = T_new;
@@ -170,15 +165,19 @@ cb.Label.String = 'Temperature (K)';
 xlabel('X (mm)');
 ylabel('Y (mm)');
 % 设置图片标题为 'i s'
-title(sprintf('%d s', k), 'FontSize', 12, 'FontWeight', 'normal');
+if k <= 25
+    frame_time = (k - 1) / 5;
+else
+    frame_time = 5 + (k - 26);
+end
+title(sprintf('%.1f s', frame_time), 'FontSize', 12, 'FontWeight', 'normal');
 set(gca, 'FontSize', 11, 'LineWidth', 0.8, 'TickDir', 'out', 'Box', 'on');
-
-xlim([0, max(x_mm_plot)]);
-ylim([0, max(y_mm_plot)]);
 
 % 保证横纵坐标比例一致
 axis equal;  % 保持横纵坐标比例一致
 axis image;      % 保持图像长宽比
+xlim([0, x_range_mm]);
+ylim([0, y_range_mm]);
 
 % 返回图像对象作为输出
 processed_image = gcf;  % 获取当前图形句柄作为输出
