@@ -2,6 +2,7 @@
 !.gitignore
 !README.md
 !main.m
+!batch_normalize_crop.m
 !temp.m
 !mask.m
 !rgb.m
